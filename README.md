@@ -13,7 +13,9 @@ A modified version of rDUINOScope that works with Adafruit 3.5" 320X480 TFT SPI 
  - Orange color for Name and Description when tracking objects.
  - Added custom.csv wich can be used to add more custom sky objects (still to be implemented)
 
--#rDUINOScope
+===========================================================
+
+#rDUINOScope
 
 THE WORLD'S FIRST STAND ALONE ARDUINO BASED TELESCOPE CONTROL GOTO (handheld controller). 
 
