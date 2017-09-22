@@ -150,7 +150,7 @@ void considerTouchInput(int lx, int ly){
           last_button = 10;
           removeTime_addXX();
           
-       } else if (lx > 30 && lx < 100 && ly > 405 && ly < 460){
+       } else if (lx > 25 && lx < 95 && ly > 405 && ly < 460){
        // BTN SummerTime pressed
          last_button = 22;
       }
@@ -196,6 +196,7 @@ void considerTouchInput(int lx, int ly){
               }
               int_star_count = floor(cc/15) + 1;    
           }
+          delay(500);
           drawStarSyncScreen();
        }else if (lx > 30 && lx < 250 && ly > 400 && ly < 455){
          // BTN "Skip Alignment" pressed
@@ -459,37 +460,37 @@ void considerTouchInput(int lx, int ly){
        if (lx > 0 && lx < 45 && ly > 230 && ly < 270){
        // ECO Mode - Timeout in seconds  Never
           TFT_timeout = 0;
-          TFT_Time="AL-ON";
+          TFT_Time="0";
           drawOptionsScreen();
         }
        if (lx > 55 && lx < 100 && ly > 230 && ly < 270){
        // ECO Mode - Timeout in seconds  30 Seconds
           TFT_timeout = 30000;
-          TFT_Time="30 S";
+          TFT_Time="30" ;
           drawOptionsScreen();
         }
        if (lx > 110 && lx < 155 && ly > 230 && ly < 270){
        // ECO Mode - Timeout in seconds   60 Seconds
           TFT_timeout = 60000;
-          TFT_Time="60 S";
+          TFT_Time="60" ;
           drawOptionsScreen();
         }
        if (lx > 165 && lx < 210 && ly > 230 && ly < 270){
        // ECO Mode - Timeout in seconds   2 Minutes
           TFT_timeout = 120000;
-          TFT_Time="2 M";
+          TFT_Time="2";
           drawOptionsScreen();
         }
        if (lx > 220 && lx < 265 && ly > 230 && ly < 270){
        // ECO Mode - Timeout in seconds  5 Minutes
           TFT_timeout = 300000;
-          TFT_Time="5 M";
+          TFT_Time="5";
           drawOptionsScreen();
         }
        if (lx > 275 && lx < 320 && ly > 230 && ly < 270){
        // ECO Mode - Timeout in seconds  10 Minutes
           TFT_timeout = 600000;
-          TFT_Time="10 M";
+          TFT_Time="10";
           drawOptionsScreen();
         }
 
@@ -879,11 +880,11 @@ void considerTouchInput(int lx, int ly){
         if (last_button == 22){
             if (Summer_Time == 1){
                 Summer_Time = 0;
-                tft.fillRect(30, 405, 71, 56,BLACK);
-                DrawButton(30,405,71,56, "SUMMER", 0, btn_l_border, btn_l_text, 1);
+                tft.fillRect(25, 405, 71, 56,BLACK);
+                DrawButton(25,405,71,56, "SUMMER", 0, btn_l_border, btn_l_text, 1);
             }else{
                 Summer_Time = 1;
-                DrawButton(30,405,71,56, "SUMMER", btn_d_border, btn_l_border, btn_l_text, 1);
+                DrawButton(25,405,71,56, "SUMMER", btn_d_border, btn_l_border, btn_l_text, 1);
             }
             tft.setTextColor(btn_l_text);
             tft.setTextSize(3);
@@ -984,14 +985,14 @@ void considerTouchInput(int lx, int ly){
             DrawButton( 220, 325, 100, 70, "FAN 1", 0, btn_l_border, btn_l_text, 2);
             digitalWrite(FAN1,LOW);
             Fan1_State="OFF";
-            drawMainScreen();
+            drawStatusBar();
          }else{
             IS_FAN1_ON = true;
             tft.fillRect(220, 325, 100, 70,BLACK);
             DrawButton( 220, 325, 100, 70, "FAN 1", btn_d_border, btn_l_border, btn_l_text, 2);
             digitalWrite(FAN1,HIGH);
             Fan1_State="ON";     
-            drawMainScreen();
+            drawStatusBar();
          }
         }
         if (last_button == 10){
@@ -1006,17 +1007,16 @@ void considerTouchInput(int lx, int ly){
             DrawButton( 220, 405, 100, 70, "FAN 2", 0, btn_l_border, btn_l_text, 2);
             digitalWrite(FAN2,LOW);
             Fan2_State="OFF";
-            drawMainScreen();
+            drawStatusBar();
          }else{
             IS_FAN2_ON = true;
             tft.fillRect(220, 405, 100, 70,BLACK);
             DrawButton( 220, 405, 100, 70, "FAN 2", btn_d_border, btn_l_border, btn_l_text, 2);
             digitalWrite(FAN2,HIGH);
             Fan2_State="ON";
-            drawMainScreen();
+            drawStatusBar();
          }
         }
     }
   }
 }
-
