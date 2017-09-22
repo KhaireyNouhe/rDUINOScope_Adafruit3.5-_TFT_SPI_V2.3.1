@@ -134,7 +134,9 @@ void considerTimeUpdates(){   // UPDATEs time on Screen1 && Screen4 -  Clock Scr
       }   
           
       update_time = millis();
-  }else if (CURRENT_SCREEN == 5 && (millis()-update_time) > 2000){
+  }
+  else if (CURRENT_SCREEN == 5 && (millis()-update_time) > 2000)
+  {
       Current_RA_DEC();
       tft.setTextSize(3);
       
@@ -152,7 +154,9 @@ void considerTimeUpdates(){   // UPDATEs time on Screen1 && Screen4 -  Clock Scr
 
       update_time = millis();  
 
-   }else if (CURRENT_SCREEN == 1 && (millis()-update_time) > 10000 && changes == 0){
+   }
+   else if (CURRENT_SCREEN == 1 && (millis()-update_time) > 10000 && changes == 0)
+   {
       tft.setCursor(110, 115);
       tft.setTextColor(l_text);
       tft.fillRect(110,115,200,30, BLACK);
@@ -163,7 +167,9 @@ void considerTimeUpdates(){   // UPDATEs time on Screen1 && Screen4 -  Clock Scr
           tft.print(rtc.getDateStr(FORMAT_LONG, FORMAT_LITTLEENDIAN, '/'));
       }
       update_time = millis();      
-  }else if (CURRENT_SCREEN == 0 && (millis()-update_time) > 5000){
+  }
+  else if (CURRENT_SCREEN == 0 && (millis()-update_time) > 5000)
+  {
         tft.fillRect(10,200,320,200, BLACK);
         tft.setTextColor(btn_l_text);
         tft.setTextSize(3);
@@ -185,23 +191,30 @@ void considerTimeUpdates(){   // UPDATEs time on Screen1 && Screen4 -  Clock Scr
         tft.setCursor(75, 350);
         tft.print("Altitude: ");
         tft.print(gps.altitude.meters());
-        if (gps.satellites.value()==0){
+        if (gps.satellites.value()==0)
+        {
           smartDelay(1000);
-        }else{
+        }
+        else
+        {
           GPS_iterrations += 1;
           smartDelay(1000);
         }
 
-         if ((GPS_iterrations > 2) && (gps.location.lat() != 0)){
+         if ((GPS_iterrations > 2) && (gps.location.lat() != 0))
+         {
           OBSERVATION_LONGITUDE = gps.location.lng();
           OBSERVATION_LATTITUDE = gps.location.lat();
           OBSERVATION_ALTITUDE = gps.altitude.meters();
           // Set the earth rotation direction depending on the Hemisphere...
           // HIGH and LOW are substituted 
-          if (OBSERVATION_LATTITUDE > 0){
+          if (OBSERVATION_LATTITUDE > 0)
+          {
             STP_FWD = LOW;
             STP_BACK = HIGH;
-          }else{
+          }
+          else
+          {
             STP_FWD = HIGH;
             STP_BACK = LOW;
           }
@@ -215,10 +228,23 @@ void considerTimeUpdates(){   // UPDATEs time on Screen1 && Screen4 -  Clock Scr
           }
           CURRENT_SCREEN = 1;
           // Serial2.end();
+
+          int time_delay = round(gps.location.lng() * 4/60); //rough calculation of the timezone delay
+          if(isSummerTime(gps.time.value()))
+          {
+            time_delay += 1;
+            Summer_Time = 1;
+          }
+          
+          rtc.setDate(gps.date.day(), gps.date.month(), gps.date.year());
+          rtc.setTime(gps.time.hour()+time_delay, gps.time.minute(), gps.time.second());
+          
           drawClockScreen();
         }
         update_time = millis(); 
-  }else if ((CURRENT_SCREEN == 13) && (IS_OBJ_FOUND == true) && ((millis()-update_time) > 2000)){
+  }
+  else if ((CURRENT_SCREEN == 13) && (IS_OBJ_FOUND == true) && ((millis()-update_time) > 2000))
+  {
        tft.setTextColor(btn_l_text);
        tft.setTextSize(2);
        float HAHh;
@@ -235,20 +261,21 @@ void considerTimeUpdates(){   // UPDATEs time on Screen1 && Screen4 -  Clock Scr
        HA_deci = (HAHh+(HAMm/60))*15;   // In degrees - decimal
 
 
-        if (ALLIGN_STEP == 1){                  
-            tft.fillRect(0,245,240,100, BLACK);
-            tft.setCursor(0, 248);
+        if (ALLIGN_STEP == 1)
+        {                  
+            tft.fillRect(0, 295, 320, 80, BLACK);
+            tft.setCursor(0, 300);
+            tft.setTextSize(2);
 
-             delta_a_RA = (double(RA_microSteps) - double(HA_deci * HA_H_CONST))/double(HA_H_CONST);
+            delta_a_RA = (double(RA_microSteps) - double(HA_deci * HA_H_CONST))/double(HA_H_CONST);
             delta_a_DEC = (double(DEC_microSteps) - double(SLEW_DEC_microsteps))/double(DEC_D_CONST);
           
             tft.print("Delta_RA: ");
-            tft.println(delta_a_RA*60, 6);
-            tft.println(" arc min.");
-            //tft.setCursor(0, 270);
+            tft.print(delta_a_RA*60, 6);
+            tft.println(" arcmin");
             tft.print("Delta_DEC: ");
-            tft.println(delta_a_DEC*60, 6);
-            tft.println(" arc min.");
+            tft.print(delta_a_DEC*60, 6);
+            tft.println(" arcmin");
             
         }
         tft.setTextSize(2);           // To make sure that when a button is Pressed, it will be re-drawn sith Size 2 text!
