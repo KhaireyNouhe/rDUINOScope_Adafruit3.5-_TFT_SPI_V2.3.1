@@ -67,6 +67,7 @@ int Clock_Lunar;  // Variable for the Interruptions. nterruption is initialized 
 #include <DueTimer.h> // interruptions library0
 #include <DS3231.h>
 #include <math.h>
+#include <TimeLib.h>
 
 // These are the four touchscreen analog pins
 #define YP A10  // Y+ to A10   >>> must be an analog pin
@@ -92,15 +93,19 @@ int sd_cs = 21;  // Khairey moved it from 4 to 41  // sd card chip select pin is
 #define DHTPIN 43   // khairey changed it from  3  to   43
 #define DHTTYPE DHT22
 
-// Nightmode Pin >>> A3
+
 DS3231 rtc(A4, A5);           // (SDA-A4, SCL-A5) from the RTC board
 DHT dht(DHTPIN, DHTTYPE);
 TinyGPSPlus gps;             // (Rx-16, Tx-17) from the RTC board
+
+/** NIGHT MODE ANALOG pin */
+#define DAY_NIGHT_PIN A6
 
 //Joystick Pins//
 int yPin = A0;
 int xPin = A1;
 int Joy_SW = A9;
+int x_cal, y_cal = 0;
 
 int FAN1 = A2;
 int FAN2 = A3;
@@ -411,6 +416,7 @@ int GPS_iterrations = 0;
 double LST, HAHour, HAMin, ALT, AZ;
 double JD;
 String BTs;
+
 int last_button, MESS_PAGER, TREAS_PAGER, STARS_PAGER;
 boolean IS_TFT_ON = true;
 boolean IS_STEPPERS_ON = true;
@@ -437,7 +443,7 @@ int LOAD_SELECTOR;   // selector to show which LOADING mechanism is used: 1 - Me
 
 String Fan1_State="ON";
 String Fan2_State="ON";
-String TFT_Time="AL-ON";
+String TFT_Time="0";
 String Sound_State = "ON";
 String Stepper_State = "ON";
 String Mer_Flip_State = "Auto";
@@ -552,7 +558,8 @@ void setup(void) {
 //  Timer3.start(Clock_Sidereal); // executes the code every 62.329 ms.
 
   
-  if (analogRead(A6) < 800){
+  if (analogRead(DAY_NIGHT_PIN) < 800)
+  {
     texts = Maroon;
     l_text = RED;
     d_text = Maroon;
@@ -614,31 +621,6 @@ void setup(void) {
   tft.println("Version: " + FirmwareNumber);
   tft.setCursor(0, 220);
   tft.setTextSize(1);
-  
-  // EMPIRIAL MARCH   :)
-  if (IS_SOUND_ON){
-    SoundOn(note_f, 48);
-    delay(100);
-    SoundOn(note_f, 48);
-    delay(100);
-    SoundOn(note_f, 48);
-    delay(100);
-    SoundOn(note_cb, 32);
-    delay(140);
-    SoundOn(note_gb, 8);
-    delay(50);
-    SoundOn(note_f, 48);
-    delay(100);
-    SoundOn(note_cb, 32);
-    delay(140);
-    SoundOn(note_gb, 8);
-    delay(50);
-    SoundOn(note_f, 48);
-  }
-
-  // Indiana Jones :)
-  // notes: E-E-F-G-C-C-C-C   D-D-E-F-F-F-F   G-G-A-B-F-F-F-F-F   A-A-B-C-D-E-E-E-E 
-  // Write the code if you are a fan :)
   
   // see if the card is present and can be initialized:
   char in_char;
@@ -718,6 +700,42 @@ void setup(void) {
   tft.println("...initializing BlueTooth");
   delay(100);
   tft.println("...initializing GPS");
+  
+   calibrateJoypad(&x_cal, &y_cal);
+  //Serial.println(x_cal);
+  //Serial.println(y_cal);
+  //Serial.println("");
+
+  // Draw Supporters Logos
+  char logo_n[50];
+  String logo_name = "hackad24.bmp";
+  logo_name.toCharArray(logo_n,50);
+  bmpDraw(logo_n, 100, 390);
+  delay(200);
+  tft.setCursor(0, 370);
+  tft.setTextColor(l_text);
+  tft.println("SUPPORTERS:");
+  // EMPIRIAL MARCH - if sounds everything was initialized well   :)
+  if (IS_SOUND_ON)
+  {
+    SoundOn(note_f, 48);
+    delay(100);
+    SoundOn(note_f, 48);
+    delay(100);
+    SoundOn(note_f, 48);
+    delay(100);
+    SoundOn(note_cb, 32);
+    delay(140);
+    SoundOn(note_gb, 8);
+    delay(50);
+    SoundOn(note_f, 48);
+    delay(100);
+    SoundOn(note_cb, 32);
+    delay(140);
+    SoundOn(note_gb, 8);
+    delay(50);
+    SoundOn(note_f, 48);
+  }
 
   delay(1000);
   CURRENT_SCREEN = 0;
@@ -794,17 +812,21 @@ void loop(void) {
 
 
       // JOYSTICK Movements ? ... if any
-      xPosition = analogRead(xPin);
-      yPosition = analogRead(yPin);
-      
-      if ((xPosition < 500) || (xPosition > 800) || (yPosition < 500) || (yPosition > 800)){
-         IS_MANUAL_MOVE = true;
-        if (IS_STEPPERS_ON){
-          consider_Manual_Move(xPosition, yPosition);
-        }
-      }else{
-        IS_MANUAL_MOVE = false;
+    xPosition = analogRead(xPin);
+    yPosition = analogRead(yPin);
+
+    if ((xPosition < x_cal-50) || (xPosition > x_cal+50) || (yPosition < y_cal-50) || (yPosition > x_cal+50))
+    {
+      IS_MANUAL_MOVE = true;
+      if (IS_STEPPERS_ON) {
+        consider_Manual_Move(xPosition, yPosition);
       }
+    }
+    else
+    {
+      IS_MANUAL_MOVE = false;
+    }
+
 
       // This will take care of turning OFF the TFT's background light if the device is not used
       // for XXX amont of seconds and IS_IN_OPERATION = TRUE
@@ -1794,4 +1816,85 @@ uint32_t read32(File &f) {
   ((uint8_t *)&result)[2] = f.read();
   ((uint8_t *)&result)[3] = f.read(); // MSB
   return result;
+}
+
+/*
+ * isSummerTime(time_t t) : uses Time.h
+ * ---------
+ * 
+ * Given t, this function versifies if the date time needs to be updated by adding 1h due to Summer time
+ * 
+ * Return: true if summer time, false otherwise
+*/
+
+bool isSummerTime(time_t t) //in Italy: Summer time ends the last sunday of october and begins the last of march
+{
+  bool summer_time = false;
+  setTime(t);
+
+  // If i'm in October
+  if (month() == 10)
+  {
+    if (weekday() == 0 && (day() + 7) > 31 && hour() >= 3) summer_time = false;
+    else
+    {
+      // Se non è domenica, ma l'ultima è già passata
+      if ((day() + (7 - weekday())) > 31) summer_time = false;
+      else  summer_time = true;
+
+    }
+  }
+  // Se sono a marzo
+  else if (month() == 3)
+  {
+    // Se è domenica
+    if (weekday() == 0)
+    {
+      // Se è l'ultima domenica
+      if ((day() + 7) > 31 && hour() >= 2) summer_time = true;
+    }
+    else
+    {
+      // Se non è domenica, ma l'ultima è già passata
+      if ((day() + (7 - weekday())) > 31) summer_time = true;
+      else  summer_time = false;
+    }
+  }
+  // Se sono nel periodo dell'ora legale
+  else if (month() >= 4 && month() <= 9) summer_time = true;
+  // Se sono nel periodo dell'ora solare
+  else if ((month() >= 1 && month() <= 2) || (month() >= 11 && month() <= 12)) summer_time = false;
+
+  return summer_time;
+}
+
+// Performs ~310.000 readings to find the mean value of the joypad (error: 3*10^-4 % )
+void calibrateJoypad(int *x_cal, int *y_cal)
+{
+  tft.println("\n");
+  tft.setTextColor(title_bg);
+  tft.println("Please avoid touching the Joypad for the next 3 seconds to let the software calibrate.\n");
+  tft.setTextColor(l_text);
+
+  int now_t = millis();
+  int prev_t = millis();
+  int c = 3;
+
+  tft.print("3.. ");
+  while(millis() < now_t + 3000)
+  {
+    if(millis() > prev_t + 1000)
+    {
+      c--;
+      tft.print(c);
+      tft.print(".. ");
+      prev_t = millis();
+    }
+    *x_cal = (*x_cal + analogRead(A0)) / 2;
+    *y_cal = (*y_cal + analogRead(A1)) / 2;
+  }
+
+  tft.setTextColor(GREEN);
+  tft.print("done!");
+  tft.setTextColor(l_text);
 }
