@@ -12,11 +12,10 @@ A modified version of rDUINOScope that works with Adafruit 3.5" 320X480 TFT SPI 
  - Custom line of text can be appended to any .csv file to display custom "Description" strings. Example: I added "rich cluster with        more than 100 stars" to M11 in messier.csv
  - Orange color for Name and Description when tracking objects.
  - Added custom.csv wich can be used to add more custom sky objects (still to be implemented)
-
 ===========================================================
 Repairs: 
-1- Re-position Summer button at Clock Screen.
-2- added Green and Red colors to Screen-Timeout at the status bar.
+-Re-position Summer button at Clock Screen.
+-added Green and Red colors to Screen-Timeout at the status bar.
 ===========================================================
 
 #rDUINOScope
