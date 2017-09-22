@@ -2,7 +2,7 @@
 A modified version of rDUINOScope that works with Adafruit 3.5" 320X480 TFT SPI mode, Updated to the latest firmware version V_2.3.1.
 
 
-
+===========================================================
  ***-Update Saturday 23/9/2017
  - Added Giacomo Mammarellas's new features Like:
 
@@ -13,6 +13,10 @@ A modified version of rDUINOScope that works with Adafruit 3.5" 320X480 TFT SPI 
  - Orange color for Name and Description when tracking objects.
  - Added custom.csv wich can be used to add more custom sky objects (still to be implemented)
 
+===========================================================
+Repairs: 
+1- Re-position Summer button at Clock Screen.
+2- added Green and Red colors to Screen-Timeout at the status bar.
 ===========================================================
 
 #rDUINOScope
