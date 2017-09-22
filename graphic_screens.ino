@@ -110,9 +110,9 @@ void drawClockScreen(){
     for (int j=0; j<3; j++){
       if (kk==10){
         if (Summer_Time == 1){
-          DrawButton(30,405,71,56, "SUMMER", btn_d_border, btn_l_border, btn_l_text, 1);
+          DrawButton(25,405,71,56, "SUMMER", btn_d_border, btn_l_border, btn_l_text, 1);
         }else{
-          DrawButton(30,405,71,56, "SUMMER", 0, btn_l_border, btn_l_text, 1);
+          DrawButton(25,405,71,56, "SUMMER", 0, btn_l_border, btn_l_text, 1);
         }
       }else if (kk==11){
         DrawButton(125,405,71,56, "0", btn_d_border, 0, btn_l_text, 3);
@@ -198,16 +198,51 @@ tft.print(TFT_Brightness*100/255);
 if(TFT_Brightness<=253)
 { 
 tft.setTextColor(Button_State_OFF);
-tft.setCursor(5, 15);
+tft.setCursor(7, 15);
 tft.print(TFT_Brightness*100/255);
 }
 
-tft.setCursor(30, 15);
+tft.setCursor(29, 15);
 tft.print("%");
 
-tft.setCursor(47, 15);
-tft.setTextColor(Button_State_ON);
-tft.print(TFT_Time);
+
+
+if (TFT_Time=="0"){
+  tft.setCursor(47, 15);
+ tft.setTextColor(Button_State_ON);
+tft.print("AL-ON");
+ }
+
+if (TFT_Time=="30"){
+  tft.setCursor(49, 15);
+ tft.setTextColor(Button_State_OFF);
+tft.print("30 S");
+ }
+
+if (TFT_Time=="60"){
+  tft.setCursor(49, 15);
+ tft.setTextColor(Button_State_OFF);
+tft.print("60 S");
+ }
+
+if (TFT_Time=="2"){
+  tft.setCursor(49, 15);
+ tft.setTextColor(Button_State_OFF);
+tft.print("2 M");
+ }
+
+if (TFT_Time=="5"){
+  tft.setCursor(49, 15);
+ tft.setTextColor(Button_State_OFF);
+tft.print("5 M");
+ }
+
+if (TFT_Time=="10"){
+  tft.setCursor(48, 15);
+ tft.setTextColor(Button_State_OFF);
+tft.print("10 M");
+ }
+ 
 
 if (Tracking_Mode=="Celest") {
 tft.setCursor(88, 15);
@@ -301,8 +336,12 @@ tft.setTextColor(title_texts);
   tft.print("Time:");
   tft.print(String(rtc.getTimeStr()).substring(0,5));
   
-  tft.setCursor(1, 65);
-  tft.print("LST :");
+  tft.setCursor(7, 65);
+  tft.print("LST");
+
+  tft.setCursor(73, 65);
+  tft.print(":");
+  
   if ((int)LST < 10){
     tft.print("0");
     tft.print((int)LST);
@@ -373,8 +412,9 @@ tft.setTextColor(title_texts);
 // Data for the observed object....
 if (OBJECT_NAME != ""){
   tft.setTextSize(3);
-  tft.setTextColor(l_text);
+  tft.setTextColor(title_bg);
   tft.print(OBJECT_NAME);
+  tft.setTextColor(l_text);
   tft.setTextSize(2);
       if ((OBJECT_NAME != "CP") && (IS_BT_MODE_ON == false)){
           tft.setCursor(92,290);
@@ -395,7 +435,9 @@ if (OBJECT_NAME != ""){
     tft.setCursor(272, 252);
     tft.print("!");
   }else{  
-    tft.println(OBJECT_DESCR);
+    tft.setTextColor(title_bg);
+    tft.print(OBJECT_DESCR);
+    tft.setTextColor(l_text);
   }
   tft.setCursor(0, 170);
   tft.setTextColor(l_text);
@@ -873,7 +915,6 @@ void drawConstelationScreen(int indx){
   }
 }
 
-
 void OnScreenMsg(int Msg){
 // Msg = 1 -> Moving;
 // Msg = 2 -> Tracking Off;
@@ -944,7 +985,7 @@ void OnScreenMsg(int Msg){
 
 void considerDayNightMode(){
   boolean prev_night_mode = IS_NIGHTMODE;
-          if (analogRead(A6) < 800){
+          if (analogRead(DAY_NIGHT_PIN) < 800){
               IS_NIGHTMODE = true;
           } else {
               IS_NIGHTMODE = false;
@@ -1210,3 +1251,175 @@ bmpDraw(My_Map, 0, 40);
   IS_CUSTOM_MAP_SELECTED = false;
 }
 
+void drawStatusBar()
+{
+  tft.fillRect(0, 1, 320, 26, title_bg);
+     
+  tft.setTextSize(1);
+  tft.setTextColor(Button_Title);
+  
+  tft.setCursor(3, 4);
+  tft.print("Bright");
+  
+  tft.setCursor(47, 4);
+  tft.print("T-out");
+  
+  tft.setCursor(85, 4);
+  tft.print("Track-M");
+  
+  tft.setCursor(138, 4);
+  tft.print("Mer-F");
+  
+  tft.setCursor(177, 4);
+  tft.print("Fan1");
+  
+  tft.setCursor(210, 4);
+  tft.print("Fan2");
+  
+  tft.setCursor(244, 4);
+  tft.print("Sound");
+  
+  tft.setCursor(283, 4);
+  tft.print("Motors");
+
+  if(TFT_Brightness>=254)
+{ 
+tft.setTextColor(Button_State_ON);
+tft.setCursor(5, 15);
+tft.print(TFT_Brightness*100/255);
+}
+
+if(TFT_Brightness<=253)
+{ 
+tft.setTextColor(Button_State_OFF);
+tft.setCursor(7, 15);
+tft.print(TFT_Brightness*100/255);
+}
+
+tft.setCursor(29, 15);
+tft.print("%");
+
+
+
+if (TFT_Time=="0"){
+  tft.setCursor(47, 15);
+ tft.setTextColor(Button_State_ON);
+tft.print("AL-ON");
+ }
+
+if (TFT_Time=="30"){
+  tft.setCursor(49, 15);
+ tft.setTextColor(Button_State_OFF);
+tft.print("30 S");
+ }
+
+if (TFT_Time=="60"){
+  tft.setCursor(49, 15);
+ tft.setTextColor(Button_State_OFF);
+tft.print("60 S");
+ }
+
+if (TFT_Time=="2"){
+  tft.setCursor(49, 15);
+ tft.setTextColor(Button_State_OFF);
+tft.print("2 M");
+ }
+
+if (TFT_Time=="5"){
+  tft.setCursor(49, 15);
+ tft.setTextColor(Button_State_OFF);
+tft.print("5 M");
+ }
+
+if (TFT_Time=="10"){
+  tft.setCursor(48, 15);
+ tft.setTextColor(Button_State_OFF);
+tft.print("10 M");
+ }
+ 
+
+if (Tracking_Mode=="Celest") {
+tft.setCursor(88, 15);
+ tft.setTextColor(Button_State_ON);
+  tft.print("Celest");
+}
+
+if (Tracking_Mode=="Lunar") {
+tft.setCursor(88, 15);
+ tft.setTextColor(Button_State_OFF);
+  tft.print("Lunar");
+}
+
+if (Tracking_Mode=="Solar") {
+tft.setCursor(88, 15);
+ tft.setTextColor(Purple);
+  tft.print("Solar");
+}
+
+tft.setCursor(141, 15);
+ tft.setTextColor(Button_State_ON);
+ tft.print("AUTO");
+ 
+if (Mer_Flip_State=="AUTO") {
+   tft.fillRect(140,14,30,10, title_bg);
+tft.setCursor(141, 15);
+ tft.setTextColor(Button_State_ON);
+  tft.print("AUTO");
+}
+
+if (Mer_Flip_State=="OFF") {
+tft.fillRect(140,14,30,10, title_bg);
+tft.setCursor(141, 15);
+ tft.setTextColor(Button_State_OFF);
+  tft.print("OFF");
+}
+
+if (Fan1_State=="ON") {
+  tft.setCursor(180, 15);
+ tft.setTextColor(Button_State_ON);
+  tft.print("ON");
+}
+
+if (Fan1_State=="OFF") {
+  tft.setCursor(180, 15);
+  tft.setTextColor(Button_State_OFF);
+  tft.print("OFF");
+}
+
+if (Fan2_State=="ON") {
+  tft.setCursor(214, 15);
+ tft.setTextColor(Button_State_ON);
+  tft.print("ON");
+}
+
+if (Fan2_State=="OFF") {
+  tft.setCursor(214, 15);
+  tft.setTextColor(Button_State_OFF);
+  tft.print("OFF");
+}
+
+if (Sound_State=="ON") {
+  tft.setCursor(252, 15);
+ tft.setTextColor(Button_State_ON);
+  tft.print("ON");
+}
+
+if (Sound_State=="OFF") {
+  tft.setCursor(252, 15);
+  tft.setTextColor(Button_State_OFF);
+  tft.print("OFF");
+}
+
+if (Stepper_State=="ON") {
+tft.setCursor(292, 15);
+ tft.setTextColor(Button_State_ON);
+  tft.print("ON");
+}
+
+if (Stepper_State=="OFF") {
+tft.setCursor(292, 15);
+tft.setTextColor(Button_State_OFF);
+  tft.print("OFF");
+
+  }
+}
