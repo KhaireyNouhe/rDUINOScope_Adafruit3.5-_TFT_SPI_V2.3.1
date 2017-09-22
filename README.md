@@ -5,6 +5,7 @@ A modified version of rDUINOScope that works with Adafruit 3.5" 320X480 TFT SPI 
 ===========================================================
 
  #Update Saturday 23/9/2017:
+ 
  #Added Giacomo Mammarellas's new features Like:
 
  - Joypad calibration at startup. No more panic to find right values for the joypad.
