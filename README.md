@@ -3,6 +3,16 @@ A modified version of rDUINOScope that works with Adafruit 3.5" 320X480 TFT SPI 
 
 
 
+ -Update Saturday 23/9/2017
+ - Added Giacomo Mammarellas's new features Like:
+
+ 1- Joypad calibration at startup. No more panic to find right values for the joypad.
+ 2- Empirial March sound function moved to confirm good initialization of the device. If no sound then you're having problems! :'(
+ 3- Automatic data and time set on clockScreen() derived from GPS data: the software is able to calculate the location's time zone and       to auto update to summer or winter time.
+ 4- Custom line of text can be appended to any .csv file to display custom "Description" strings. Example: I added "rich cluster with       more than 100 stars" to M11 in messier.csv
+ 5- Orange color for Name and Description when tracking objects.
+ 6- Added custom.csv wich can be used to add more custom sky objects (still to be implemented)
+
 
 
 
