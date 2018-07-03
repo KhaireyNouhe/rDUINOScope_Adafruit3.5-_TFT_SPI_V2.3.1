@@ -3,10 +3,30 @@ A modified version of rDUINOScope that works with Adafruit 3.5" 320X480 TFT SPI 
 
 
 ===========================================================
-
- #Update Saturday 23/9/2017:
+ # Update Tuesday 3/7/2018 (Fayrouz Update!):
  
- #Added Giacomo Mammarellas's new features Like:
+ # Includes Giacomo Mammarellas's updated features.
+
+ 1- No hardware changes.
+ 2- Memory card contents are changed.
+ 3- Changed supporters logos at startup page.
+ 4- Full Hardware check and confirmation at initilize.
+ 5- More Accurate Joystick calibration at startup.
+ 6- Options' data are saved to a text file on the memory card, and will be restored and initilized during next boot.
+ 7- A new screen brightness control triangle has been added.
+ 8- New on screen messages has been added.
+ 9- Prevent (Load), (Home), and (Track) buttons to function while steppers are off. Avoiding Wrong Telescope Position coordinates while      steppers are off.
+ 10- Corrected Steppers' speed during " Slew to" process . very slow,slow,fast,faster>>>>>>>>>>>fast,slow,very slow,stop,track.
+ 11- faster browsing for Messier and treasures catalogs.
+ 12- Automatic date and time set on clockScreen() derived from GPS data: the software is able to calculate the location's time zone and      to auto update from summer or winter time.
+ 13- Added an new button in Options screen to update date and time from GPS data.
+ 14- New debug mode. can be used to debug touchscreen actions.
+ 
+ ===========================================================
+
+ # Update Saturday 23/9/2017:
+ 
+ # Added Giacomo Mammarellas's new features Like:
 
  - Joypad calibration at startup. No more panic to find right values for the joypad.
  - Empirial March sound function moved to confirm good initialization of the device. If no sound then you're having problems! :'(
