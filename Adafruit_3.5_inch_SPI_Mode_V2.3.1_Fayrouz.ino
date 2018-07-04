@@ -156,7 +156,7 @@ TouchScreen ts = TouchScreen(XP, YP, XM, YM, 300);
 #define WHITE           0xFFFF      /* 255, 255, 255 */
 #define Orange          0xFD20      /* 255, 165,   0 */
 #define GreenYellow     0xAFE5      /* 173, 255,  47 */
-#define Purple            0xF81F
+
 
 #define  note_c     3830    // 261 Hz 
 #define  note_cb    3610    // 261 Hz 
