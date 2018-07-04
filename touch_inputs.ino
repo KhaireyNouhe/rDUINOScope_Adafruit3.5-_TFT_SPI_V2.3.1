@@ -1122,15 +1122,25 @@ void considerTouchInput(int lx, int ly){
           
           
         if (last_button == 6){    // BlueTooth Mode
+          if (IS_STEPPERS_ON == true){
+            
           if (IS_BT_MODE_ON == true){
             IS_BT_MODE_ON = false;
           }else{
             IS_BT_MODE_ON = true;
-              // Initialize Bluetooth communication on PINs: 15 (RX) and 14 (TX) 
+           // Initialize Bluetooth communication on PINs: 15 (RX) and 14 (TX) 
           }
           last_button = 0;
           drawMainScreen();
+          }
+          else if (IS_STEPPERS_ON == false){
+              last_button = 0;
+              OnScreenMsg(5);
+              CURRENT_SCREEN = 7;
+              drawOptionsScreen();
         }
+        }
+      
         if (last_button == 7 && IS_BT_MODE_ON == false){
          last_button = 0;
          //DrawButton( 1, 325, 100, 70, "LOAD", btn_l_text, 0, btn_d_text, 2);
