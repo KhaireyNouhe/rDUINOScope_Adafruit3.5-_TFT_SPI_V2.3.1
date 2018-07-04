@@ -1039,6 +1039,8 @@ void considerTouchInput(int lx, int ly){
          drawLoadScreen();
         
         }else if (IS_STEPPERS_ON == false){
+         tft.fillRect(1, 325, 100, 70,BLACK);
+         DrawButton( 1, 325, 100, 70, "LOAD", btn_d_border, btn_l_border, btn_l_text, 2);
          OnScreenMsg(5);
          CURRENT_SCREEN = 7;
          drawOptionsScreen();
@@ -1073,7 +1075,8 @@ void considerTouchInput(int lx, int ly){
          last_button = 0;
          IS_TRACKING = false;
          Timer3.stop();
-         DrawButton( 111, 325, 100, 70, "HOME", btn_l_text, 0, btn_d_text, 2);
+         tft.fillRect(111, 325, 100, 70,BLACK);
+         DrawButton( 111, 325, 100, 70, "HOME", btn_d_border, btn_l_border, btn_l_text, 2);
          OnScreenMsg(5);
          drawOptionsScreen();
          
@@ -1134,13 +1137,15 @@ void considerTouchInput(int lx, int ly){
           drawMainScreen();
           }
           else if (IS_STEPPERS_ON == false){
+           tft.fillRect(220, 405, 100, 70,BLACK);
+           DrawButton( 220, 405, 100, 70, "BT", btn_d_border, btn_l_border, btn_l_text, 2);
               last_button = 0;
               OnScreenMsg(5);
               CURRENT_SCREEN = 7;
               drawOptionsScreen();
         }
         }
-      
+        
         if (last_button == 7 && IS_BT_MODE_ON == false){
          last_button = 0;
          //DrawButton( 1, 325, 100, 70, "LOAD", btn_l_text, 0, btn_d_text, 2);
@@ -1209,4 +1214,3 @@ void considerTouchInput(int lx, int ly){
     }
   }
 }
-
