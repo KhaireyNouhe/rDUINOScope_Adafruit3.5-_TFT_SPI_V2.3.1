@@ -15,7 +15,7 @@ A modified version of rDUINOScope that works with Adafruit 3.5" 320X480 TFT SPI 
  * Options' data are saved to a text file on the memory card, and will be restored and initilized during next boot.
  * A new screen brightness control triangle has been added.
  * New on screen messages has been added.
- * Prevent (Load), (Home), and (Track) buttons to function while steppers are off. Avoiding Wrong Telescope Position coordinates while      steppers are off.
+ * Prevent (Load), (Home), (Bluetooth), and (Track) buttons to function while steppers are off. Avoiding Wrong Telescope Position coordinates while      steppers are off.
  * Corrected Steppers' speed during " Slew to" process . very slow>slow>fast>faster>>>>>>>>>>>fast>slow>very slow>stop>track.
  * faster browsing for Messier and treasures catalogs.
  * Automatic date and time set on clockScreen() derived from GPS data: the software is able to calculate the location's time zone and      to auto update from summer or winter time.
