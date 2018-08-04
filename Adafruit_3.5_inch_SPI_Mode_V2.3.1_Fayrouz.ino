@@ -1292,46 +1292,46 @@ int delta_RA_timer = millis() - Slew_RA_timer;
 
     if (delta_DEC_time >= 0 && delta_DEC_time < 1800){
       
-        if (DEC_mode_steps != 16){
-            setmStepsMode("D",16);
-        }
-    }
-    if (delta_DEC_time >= 1800 && delta_DEC_time < 2600){
         if (DEC_mode_steps != 8){
             setmStepsMode("D",8);
         }
     }
-    if (delta_DEC_time >= 2600 && delta_DEC_time < 3400){
+    if (delta_DEC_time >= 1800 && delta_DEC_time < 2600){
         if (DEC_mode_steps != 4){
             setmStepsMode("D",4);
         }
     }
-    if (delta_DEC_time >= 3400){
-         if (DEC_mode_steps != 2){
+    if (delta_DEC_time >= 2600 && delta_DEC_time < 3400){
+        if (DEC_mode_steps != 2){
             setmStepsMode("D",2);
+        }
+    }
+    if (delta_DEC_time >= 3400){
+         if (DEC_mode_steps != 1){
+            setmStepsMode("D",1);
         }
     }
 
 
 
     if (delta_RA_timer >= 0 && delta_RA_timer < 1800){
-        if (RA_mode_steps != 16){
-            setmStepsMode("R",16);
-        }
-    }
-    if (delta_RA_timer >= 1800 && delta_RA_timer < 2600){
         if (RA_mode_steps != 8){
             setmStepsMode("R",8);
         }
     }
-    if (delta_RA_timer >= 2600 && delta_RA_timer < 3400){
+    if (delta_RA_timer >= 1800 && delta_RA_timer < 2600){
         if (RA_mode_steps != 4){
             setmStepsMode("R",4);
         }
     }
-    if (delta_RA_timer >= 3400){
+    if (delta_RA_timer >= 2600 && delta_RA_timer < 3400){
         if (RA_mode_steps != 2){
             setmStepsMode("R",2);
+        }
+    }
+    if (delta_RA_timer >= 3400){
+        if (RA_mode_steps != 1){
+            setmStepsMode("R",1);
         }
     }
 
@@ -1342,23 +1342,23 @@ int delta_RA_timer = millis() - Slew_RA_timer;
 // Speed goes DOWN in 2.2 sec....then ..... FULL Speed ..... then....Speed goes Down for 3/4 Revolution of the drive  
 
     if ((abs(delta_DEC_steps) >= 1200) && (abs(delta_DEC_steps) <= 3000)){ 
+        if (DEC_mode_steps != 4){
+            setmStepsMode("D",4);
+        }
+    }
+    if ((abs(delta_DEC_steps) < 3000)){ 
         if (DEC_mode_steps != 8){
             setmStepsMode("D",8);
         }
     }
-    if ((abs(delta_DEC_steps) < 3000)){ 
-        if (DEC_mode_steps != 16){
-            setmStepsMode("D",16);
-        }
-    }
     if ((abs(delta_RA_steps) >= 1200) && (abs(delta_RA_steps) <= 3000)){
-        if (RA_mode_steps != 8){
-            setmStepsMode("R",8);
+        if (RA_mode_steps != 4){
+            setmStepsMode("R",4);
         }
     }
     if (abs(delta_RA_steps) < 3000){
-        if (RA_mode_steps != 16){
-            setmStepsMode("R",16);
+        if (RA_mode_steps != 8){
+            setmStepsMode("R",8);
             RA_move_ending = 1;
         }
     }
