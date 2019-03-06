@@ -1,6 +1,15 @@
 # rDUINOScope_Adafruit3.5-TFT_SPI_V2.3.1
 A modified version of rDUINOScope that works with Adafruit 3.5" 320X480 TFT SPI mode, Updated to the latest firmware version V_2.3.1.
 
+===========================================================
+Update Tuesday 16/3/2019 (Fayrouz Update With Solar System!):
+#Includes Giacomo Mammarellas's updated features!
+
+* No hardware changes.
+* Memory card contents are changed.
+* Added Solar System objects tracking to Load Screen.
+* Added Battery Power indicator to main screen, currently showing USB only, just for future upgrade.
+* Added images for Solar and stellar objects to show on Main Screen. ( Memory Car items changed). 
 
 ===========================================================
  # Update Tuesday 3/7/2018 (Fayrouz Update!):
