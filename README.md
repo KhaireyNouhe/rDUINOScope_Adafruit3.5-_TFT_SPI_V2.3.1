@@ -3,7 +3,8 @@ A modified version of rDUINOScope that works with Adafruit 3.5" 320X480 TFT SPI 
 
 ===========================================================
 # Update Tuesday 16/3/2019 (Fayrouz Update With Solar System!):
-
+# Use IDE 1.8.5 to avoid compile errors.
+ 
 #Includes Giacomo Mammarellas's updated features!
 
 * No hardware changes.
