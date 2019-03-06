@@ -2,7 +2,8 @@
 A modified version of rDUINOScope that works with Adafruit 3.5" 320X480 TFT SPI mode, Updated to the latest firmware version V_2.3.1.
 
 ===========================================================
-Update Tuesday 16/3/2019 (Fayrouz Update With Solar System!):
+# Update Tuesday 16/3/2019 (Fayrouz Update With Solar System!):
+
 #Includes Giacomo Mammarellas's updated features!
 
 * No hardware changes.
