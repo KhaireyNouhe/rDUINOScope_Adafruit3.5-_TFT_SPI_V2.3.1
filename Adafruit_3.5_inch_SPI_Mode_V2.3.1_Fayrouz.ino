@@ -1,50 +1,30 @@
-#include <Nextion.h>  // Include the nextion library (the official one) https://github.com/itead/ITEADLIB_Arduino_Nextion
-// Make sure you edit the NexConfig.h file on the library folder to set the correct serial port for the display.
-// By default it's set to Serial1, which most arduino boards don't have.
-// Change "#define nexSerial Serial1" to "#define nexSerial Serial" if you are using arduino uno, nano, etc.
+//
+//    rDUINOScope - Arduino based telescope control system (GOTO).
+//    Copyright (C) 2016 Dessislav Gouzgounov (Desso)
+//    This program is free software: you can redistribute it and/or modify
+//    it under the terms of the GNU General Public License as published by
+//    the Free Software Foundation, either version 3 of the License, or
+//    any later version.
+//
+//    PROJECT Website: http://rduinoscope.byethost24.com
+//
+//    This program is distributed in the hope that it will be useful,
+//    but WITHOUT ANY WARRANTY; without even the implied warranty of
+//    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+//    GNU General Public License for more details.
+//
+//    You should have received a copy of the GNU General Public License
+//    along with this program.  If not, see <http://www.gnu.org/licenses/>.
+//
+//    ALLIGNMENT Method: 1 Star Alignment - The method I have implemented is part of Mr. Ralph Pass alignment procedure described on http://rppass.com/  
+//                       Mr. Pass helped rDUINOScope by providing the calculations needed to implement the method. http://rppass.com/align.pdf - the actual PDF
+//                       
+//                       Iterative Alignment - The method is based on article from "New" Hamilton Astronomy.com website: http://astro.hcadvantage.com
+//                       Actual PDF document: http://astro.hcadvantage.com/ASTRO_ARTICLES/Polar_Alignment_Part_II.pdf
+//          
+//
+//
 
-
-int CurrentPage = 0;  // Create a variable to store which page is currently loaded
-
-// Declare objects that we are going to read from the display. This includes buttons, sliders, text boxes, etc:
-// Format: <type of object> <object name> = <type of object>(<page id>, <object id>, "<object name>");
-/* ***** Types of objects:
-   NexButton - Button
-   NexDSButton - Dual-state Button
-   NexHotspot - Hotspot, that is like an invisible button
-   NexCheckbox - Checkbox
-   NexRadio - "Radio" checkbox, that it's exactly like the checkbox but with a rounded shape
-   NexSlider - Slider
-   NexGauge - Gauge
-   NexProgressBar - Progress Bar
-   NexText - Text box
-   NexScrolltext - Scroll text box
-   NexNumber - Number box
-   NexVariable - Variable inside the nextion display
-   NexPage - Page touch event
-   NexGpio - To use the Expansion Board add-on for Enhanced Nextion displays
-   NexRtc - To use the real time clock for Enhanced Nextion displays
- * *****
-*/
-
-// Declare pages:
-
-NexPage Boot = NexPage(0, 0, "Boot");  // Page added as a touch event
-NexPage GPS = NexPage(1, 0, "GPS");  // Page added as a touch event
-
-// Declare touch event objects to the touch event list:
-// You just need to add the names of the objects that send a touch event.
-// Format: &<object name>,
-
-NexTouch *nex_listen_list[] =
-{
-
-  &Boot,  // Page added as a touch event
-  &GPS,  // Page added as a touch event
-  NULL  // String terminated
-};  // End of touch event list
-
-//----------------------------------------------
 #define reverse_logic false //set true if the stepper drivers logic is "neglected enabled"
 //#define serial_debug       // comment out to deactivate the serial debug mode
 
@@ -230,8 +210,8 @@ boolean IS_MANUAL_MOVE = false;
 boolean IS_FAN1_ON = true;
 boolean IS_FAN2_ON = true;
 boolean IS_CUSTOM_MAP_SELECTED = false;
-boolean IS_SOUND_ON = true;
-int TFT_Brightness = 255;
+boolean IS_SOUND_ON = true;int TFT_Brightness = 255;
+
 int MAIN_SCREEN_MENU = 0;
 int CURRENT_SCREEN = 0;
 int LOAD_SELECTOR;   // selector to show which LOADING mechanism is used: 1 - Messier, 2 - File, 3 - NGCs
@@ -290,19 +270,6 @@ void setup(void) {
   while (!Serial) {}
 #endif
 
-  //////////////////////////// Nextion Setup ////////////////
-  Serial1.begin(115200);  // Start serial comunication With Nextion at baud=115200
-
-  // Register the event callback functions of each touch event:
-  // You need to register press events and release events seperatly.
-  // Format for press events: <object name>.attachPush(<object name>PushCallback);
-  // Format for release events: <object name>.attachPop(<object name>PopCallback);
-
-  Boot.attachPush(BootPushCallback);  // Page press event
-  GPS.attachPush(GPSPushCallback);  // Page press event
-  // End of registering the event callback functions
-
-  ///////////////////////////// End Of Nextion Setup //////////////
   Serial2.begin(9600);  // Initialize GPS communication on PINs: 17 (RX) and 16 (TX)
   Serial3.begin(9600); // Bluetooth communication on PINs:  15 (RX) and 14 (TX)
   pinMode(speakerOut, OUTPUT);
@@ -459,79 +426,31 @@ void setup(void) {
   
   volatile bool check = true;
   tft.print("--> Initializing touchscreen... ");
-  Serial1.print("T_initialize.txt=");  // This is sent to the nextion display to set what object name (before the dot) and what atribute (after the dot) are you going to change.
-  Serial1.print("\"");  // Since we are sending text, and not a number, we need to send double quote before and after the actual text.
-  Serial1.print("-> Initializing TouchScreen...");  // This is the text you want to send to that object and atribute mentioned before.
-  Serial1.print("\"");  // Since we are sending text, and not a number, we need to send double quote before and after the actual text.
-  Serial1.write(0xff);  // We always have to send this three lines after each command sent to the nextion display.
-  Serial1.write(0xff);
-  Serial1.write(0xff);
   tft.setTextColor(GREEN);
   tft.println("OK");
-  Serial1.print("Touch_OK.txt=");
-  Serial1.print("\"");
-  Serial1.print("OK");
-  Serial1.print("\"");
-  Serial1.write(0xff);
-  Serial1.write(0xff);
-  Serial1.write(0xff);
   tft.setTextColor(d_text);
 
   tft.print("--> Initializing DHT sensor... ");
-  Serial1.print("DHT_initialize.txt=");
-  Serial1.print("\"");
-  Serial1.print("-> Initializing DHT Sensor....");
-  Serial1.print("\"");
-  Serial1.write(0xff);
-  Serial1.write(0xff);
-  Serial1.write(0xff);
+  
   if (isnan(dht.readTemperature()) || isnan(dht.readHumidity()))
   {
     tft.setTextColor(RED);
     tft.println("FAIL");
-    Serial1.print("DHT_OK.txt=");
-    Serial1.print("\"");
-    Serial1.print("Fail");
-    Serial1.print("\"");
-    Serial1.write(0xff);
-    Serial1.write(0xff);
-    Serial1.write(0xff);
     tft.setTextColor(d_text);
   }
   else
   {
     tft.setTextColor(GREEN);
     tft.println("OK");
-    Serial1.print("DHT_OK.txt=");
-    Serial1.print("\"");
-    Serial1.print("OK");
-    Serial1.print("\"");
-    Serial1.write(0xff);
-    Serial1.write(0xff);
-    Serial1.write(0xff);
     tft.setTextColor(d_text);
   }
 
   tft.print("--> Initializing RTC... ");
-  Serial1.print("RTC_initialize.txt=");
-  Serial1.print("\"");
-  Serial1.print("-> Initializing RTC...........");
-  Serial1.print("\"");
-  Serial1.write(0xff);
-  Serial1.write(0xff);
-  Serial1.write(0xff);
   int prev_mil = millis();
   if (isnan(rtc.getTemp()))
   {
     tft.setTextColor(RED);
     tft.println("FAIL");
-    Serial1.print("RTC_OK.txt=");
-    Serial1.print("\"");
-    Serial1.print("Fail");
-    Serial1.print("\"");
-    Serial1.write(0xff);
-    Serial1.write(0xff);
-    Serial1.write(0xff);
     tft.setTextColor(d_text);
     check = false;
   }
@@ -539,13 +458,7 @@ void setup(void) {
   {
     tft.setTextColor(GREEN);
     tft.print("OK   ");
-    Serial1.print("RTC_OK.txt=");
-    Serial1.print("\"");
-    Serial1.print("OK");
-    Serial1.print("\"");
-    Serial1.write(0xff);
-    Serial1.write(0xff);
-    Serial1.write(0xff);
+  
 #ifdef serial_debug
     tft.println(rtc.getTemp());
 #else
@@ -555,13 +468,7 @@ void setup(void) {
   }
 
   tft.print("--> Initializing SD card... ");
-  Serial1.print("SD_initialize.txt=");
-  Serial1.print("\"");
-  Serial1.print("-> Initializing SD Card.......");
-  Serial1.print("\"");
-  Serial1.write(0xff);
-  Serial1.write(0xff);
-  Serial1.write(0xff);
+  
   for (int i = 0; i < 10 && !SD.begin(sd_cs); i++)
   {
     if (i == 9)
@@ -569,13 +476,6 @@ void setup(void) {
       tft.setTextColor(RED);
       tft.println("ERROR: Card failed, or not present\n");
       tft.println("Try formatting the SD card to FAT32 and replace the files.");
-      Serial1.print("SD_OK.txt=");
-      Serial1.print("\"");
-      Serial1.print("Fail");
-      Serial1.print("\"");
-      Serial1.write(0xff);
-      Serial1.write(0xff);
-      Serial1.write(0xff);
       tft.setTextColor(d_text);
       check = false;
     }
@@ -584,13 +484,6 @@ void setup(void) {
   //Debug or card initialized:
   tft.setTextColor(GREEN);
   tft.println("OK");
-  Serial1.print("SD_OK.txt=");
-  Serial1.print("\"");
-  Serial1.print("OK");
-  Serial1.print("\"");
-  Serial1.write(0xff);
-  Serial1.write(0xff);
-  Serial1.write(0xff);
   tft.setTextColor(d_text);
   //loadOptions_SD();
   //delay(100);
@@ -602,13 +495,6 @@ void setup(void) {
   if (dataFile)
   {
     tft.print("--> loading Messier catalog... ");
-    Serial1.print("Mes_initialize.txt=");
-    Serial1.print("\"");
-    Serial1.print("-> Loading Messier Catalog....");
-    Serial1.print("\"");
-    Serial1.write(0xff);
-    Serial1.write(0xff);
-    Serial1.write(0xff);
     delay(100);
     while (dataFile.available())
     {
@@ -624,13 +510,6 @@ void setup(void) {
     }
     tft.setTextColor(GREEN);
     tft.println("OK");
-    Serial1.print("Messier_OK.txt=");
-    Serial1.print("\"");
-    Serial1.print("OK");
-    Serial1.print("\"");
-    Serial1.write(0xff);
-    Serial1.write(0xff);
-    Serial1.write(0xff);
     tft.setTextColor(d_text);
     delay(100);
 
@@ -639,13 +518,6 @@ void setup(void) {
   {
     tft.setTextColor(RED);
     tft.println("ERROR opening: messier.csv");
-    Serial1.print("Messier_OK.txt=");
-    Serial1.print("\"");
-    Serial1.print("Failed");
-    Serial1.print("\"");
-    Serial1.write(0xff);
-    Serial1.write(0xff);
-    Serial1.write(0xff);
     tft.setTextColor(d_text);
   }
 
@@ -660,13 +532,6 @@ void setup(void) {
   if (dataFile)
   {
     tft.print("--> loading Treasure catalog... ");
-    Serial1.print("tre_initialize.txt=");
-    Serial1.print("\"");
-    Serial1.print("-> Loading Treasures Catalog..");
-    Serial1.print("\"");
-    Serial1.write(0xff);
-    Serial1.write(0xff);
-    Serial1.write(0xff);
     delay(100);
     while (dataFile.available()) {
       in_char = dataFile.read();
@@ -681,13 +546,6 @@ void setup(void) {
     }
     tft.setTextColor(GREEN);
     tft.println("OK");
-    Serial1.print("Treasures_OK.txt=");
-    Serial1.print("\"");
-    Serial1.print("OK");
-    Serial1.print("\"");
-    Serial1.write(0xff);
-    Serial1.write(0xff);
-    Serial1.write(0xff);
     tft.setTextColor(d_text);
     delay(100);
 
@@ -696,13 +554,6 @@ void setup(void) {
   {
     tft.setTextColor(RED);
     tft.println("ERROR opening: treasure.csv");
-    Serial1.print("Treasures_OK.txt=");
-    Serial1.print("\"");
-    Serial1.print("Failed");
-    Serial1.print("\"");
-    Serial1.write(0xff);
-    Serial1.write(0xff);
-    Serial1.write(0xff);
     tft.setTextColor(d_text);
   }
   dataFile.close();
@@ -719,13 +570,6 @@ void setup(void) {
   if (dataFile)
   {
     tft.print("--> loading custom.csv... ");
-    Serial1.print("cus_opt_load.txt=");
-    Serial1.print("\"");
-    Serial1.print("-> Loading Custom Options.....");
-    Serial1.print("\"");
-    Serial1.write(0xff);
-    Serial1.write(0xff);
-    Serial1.write(0xff);
     delay(100);
     while (dataFile.available())
     {
@@ -740,7 +584,7 @@ void setup(void) {
         items = "";
       }
     }
-    tft.setTextColor(GREEN);        /// Edit the Nextion Code here
+    tft.setTextColor(GREEN);       
     tft.println("OK");
     tft.setTextColor(d_text);
     delay(100);
@@ -767,73 +611,23 @@ void setup(void) {
     loadOptions_SD();
     tft.setTextColor(GREEN);
     tft.println("OK");
-    Serial1.print("Options_OK.txt=");
-    Serial1.print("\"");
-    Serial1.print("OK");
-    Serial1.print("\"");
-    Serial1.write(0xff);
-    Serial1.write(0xff);
-    Serial1.write(0xff);
     tft.setTextColor(d_text);
   }
   else
   {
     tft.setTextColor(RED);
     tft.println("FAIL");
-    Serial1.print("Options_OK.txt=");
-    Serial1.print("\"");
-    Serial1.print("Fail");
-    Serial1.print("\"");
-    Serial1.write(0xff);
-    Serial1.write(0xff);
-    Serial1.write(0xff);
     tft.setTextColor(d_text);
   }
   tft.println("--> initializing BlueTooth");
-  Serial1.print("BL_initialize.txt=");
-  Serial1.print("\"");
-  Serial1.print("-> Initializing Bluetooth.....");
-  Serial1.print("\"");
-  Serial1.write(0xff);
-  Serial1.write(0xff);
-  Serial1.write(0xff);
-  delay(300);
-  Serial1.print("Blue_OK.txt=");
-  Serial1.print("\"");
-  Serial1.print("OK");
-  Serial1.print("\"");
-  Serial1.write(0xff);
-  Serial1.write(0xff);
-  Serial1.write(0xff);
   delay(100);
   tft.println("--> initializing GPS");
-  Serial1.print("GPS_initialize.txt=");
-  Serial1.print("\"");
-  Serial1.print("-> Initializing GPS...........");
-  Serial1.print("\"");
-  Serial1.write(0xff);
-  Serial1.write(0xff);
-  Serial1.write(0xff);
   delay(300);
-  Serial1.print("GPS_OK.txt=");
-  Serial1.print("\"");
-  Serial1.print("OK");
-  Serial1.print("\"");
-  Serial1.write(0xff);
-  Serial1.write(0xff);
-  Serial1.write(0xff);
 
 #ifndef serial_debug
   if (check == false)  while (1); //don't do anything more
 #endif
 
-  Serial1.print("Joy_cal.txt=");
-  Serial1.print("\"");
-  Serial1.print("-> Calibrating Joystick.......");
-  Serial1.print("\"");
-  Serial1.write(0xff);
-  Serial1.write(0xff);
-  Serial1.write(0xff);
   calibrateJoypad(&x_cal, &y_cal);
 
   // Draw Supporters Logos
@@ -869,10 +663,6 @@ void setup(void) {
   delay(500);
   CURRENT_SCREEN = 0;
   drawGPSScreen();
-  Serial1.print("page GPS");  // Sending this it's going to tell the nextion display to go to page GPS.
-  Serial1.write(0xff);  // We always have to send this three lines after each command sent to the nextion display.
-  Serial1.write(0xff);
-  Serial1.write(0xff);
   UPD_T = millis();
   UPD_LST = millis();
   DELAY_Slew = millis();
@@ -880,16 +670,16 @@ void setup(void) {
   //TFT_timeout = 0;
   RA_move_ending = 0;
   considerTempUpdates();
-
+if (IS_STEPPERS_ON == true){
   digitalWrite(POWER_DRV8825, HIGH == !reverse_logic); // Switch on the Motor Driver Power!
+}else {
+  digitalWrite(POWER_DRV8825, LOW == !reverse_logic); // Switch OFF the Motor Driver Power!
+  }
 }
 
 
 void loop(void) {
 
-  /////////////// Nextion Loop //////////////////////
-  nexLoop(nex_listen_list);  // Check for any touch event
-  //////////////////// End of Nextion Loop /////////////////////////
   // This is done in order to prevent multiple calculations of LST_HA per second (especially while SlewTo) and only
   // do it once the DEC SlewTo slows down, but before stopping OR once every 10 seconds (in order to do the Meridian Flip)
   if (RA_move_ending == 1) {
