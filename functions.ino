@@ -1082,13 +1082,6 @@ void calibrateJoypad(int *x_cal, int *y_cal)
   tft.println("\n");
   tft.setTextColor(title_bg);
   tft.println("Please avoid touching the Joypad for the next 3 seconds to let the software calibrate.\n");
-  Serial1.print("Joy_warn.txt=");
-  Serial1.print("\"");
-  Serial1.print("> Please, avoid touching the Joypad for the next three        seconds to let the software calibrate...");
-  Serial1.print("\"");
-  Serial1.write(0xff);
-  Serial1.write(0xff);
-  Serial1.write(0xff);
   tft.setTextColor(l_text);
 
   int now_t = millis();
@@ -1103,29 +1096,6 @@ void calibrateJoypad(int *x_cal, int *y_cal)
       c--;
       tft.print(c);
       tft.print(".. ");
-      Serial1.print("Joy_cal_3.txt=");
-      Serial1.print("\"");
-      Serial1.print("-> 3....");
-      Serial1.print("\"");
-      Serial1.write(0xff);
-      Serial1.write(0xff);
-      Serial1.write(0xff);
-      delay(1000);
-      Serial1.print("Joy_cal_2.txt=");
-      Serial1.print("\"");
-      Serial1.print("2....");
-      Serial1.print("\"");
-      Serial1.write(0xff);
-      Serial1.write(0xff);
-      Serial1.write(0xff);
-      delay(1000);
-      Serial1.print("Joy_cal_1.txt=");
-      Serial1.print("\"");
-      Serial1.print("1....");
-      Serial1.print("\"");
-      Serial1.write(0xff);
-      Serial1.write(0xff);
-      Serial1.write(0xff);
       prev_t = millis();
     }
     *x_cal = (*x_cal + analogRead(A0)) / 2;
@@ -1134,13 +1104,6 @@ void calibrateJoypad(int *x_cal, int *y_cal)
 
   tft.setTextColor(GREEN);
   tft.print("done!");
-  Serial1.print("Joy_cal_Done.txt=");
-  Serial1.print("\"");
-  Serial1.print("Done");
-  Serial1.print("\"");
-  Serial1.write(0xff);
-  Serial1.write(0xff);
-  Serial1.write(0xff);
   tft.setTextColor(l_text);
 #ifdef serial_debug
   Serial.print("x_cal: ");
